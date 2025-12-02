@@ -1,6 +1,6 @@
-import axios from 'axios';
 import episodes from './episodes.js';
 import scrapeEpisode from '../lib/scrapeEpisode.js';
+import { getPageContent } from './puppeteerHelper.js';
 
 const { BASEURL } = process.env;
 const episode = async ({ episodeSlug, animeSlug, episodeNumber }: {
@@ -20,11 +20,7 @@ const episode = async ({ episodeSlug, animeSlug, episodeNumber }: {
     slug = `${prefixEpisodeSlug}-episode-${episodeNumber - (parseInt(firstEpisodeNumber) == 0 ? 1 : 0)}-sub-indo`;
   }
 
-  const { data } = await axios.get(`${BASEURL}/episode/${slug}`, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
-    }
-  });
+  const data = await getPageContent(`${BASEURL}/episode/${slug}`);
   const result = scrapeEpisode(data);
 
   return result;
