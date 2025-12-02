@@ -3,3 +3,4 @@ dist/
 *.html
 tes.ts
 .env
+suaverce/scrapers/otakudesu/dist/

@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  div(class="container mx-auto px-4 py-6")
+    div(class="max-w-4xl mx-auto")
+      div(class="mb-8")
+        h1(class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2") Jelajahi Genre
+        p(class="text-gray-600 dark:text-gray-400") Temukan anime berdasarkan kategori yang Anda sukai.
+
+      if genres && genres.length > 0
+        // YouTube Explore-style Grid
+        div(class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4")
+          each genre, index in genres
+            - const colors = ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-yellow-500 to-yellow-600', 'from-indigo-500 to-indigo-600', 'from-purple-500 to-purple-600', 'from-pink-500 to-pink-600']
+            - const colorClass = colors[index % colors.length]
+            a(href=`/genres/${genre.slug}` class=`group flex items-center p-4 rounded-lg bg-gradient-to-r ${colorClass} text-white shadow-lg transform hover:scale-105 transition-transform duration-300`)
+              div(class="mr-4")
+                //- Placeholder for genre-specific icons. Using a generic one for now.
+                i(data-lucide="tag" class="w-8 h-8 opacity-80")
+              div
+                h3(class="font-bold text-lg")= genre.name
+                if genre.count
+                  span(class="text-sm opacity-90")= `${genre.count} anime`
+      else
+        // Fallback if genres are not loaded
+        div(class="text-center py-16")
+          p(class="text-lg text-gray-500") Genre tidak dapat dimuat saat ini.

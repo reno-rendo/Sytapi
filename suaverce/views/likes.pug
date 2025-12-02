@@ -1,0 +1,43 @@
+extends layout
+
+block content
+  div(class="container mx-auto px-4 py-6")
+    h1(class="text-2xl font-bold mb-6 text-yt-light-text dark:text-yt-dark-text") Liked Anime
+    
+    if animeList && animeList.length > 0
+      div(id="anime-grid" class="flex flex-wrap justify-center gap-6")
+        each anime in animeList
+          a(href=`/anime/${anime.slug}` class="anime-card group w-[172px]" data-genres=animeGenres)
+            div(class="flex flex-col")
+              // Thumbnail
+              div(class="relative mb-2")
+                img(src=anime.poster alt=anime.title width="172" height="256" class="object-cover rounded-lg bg-gray-200 dark:bg-gray-700" onerror="this.onerror=null;this.src='https://placehold.co/172x256?text=No+Image';")
+                // New combined badge
+                - let badgeTextContent = anime.release_day || '';
+                if anime.current_episode
+                  - badgeTextContent += (badgeTextContent ? ' • ' : '') + `Ep ${anime.current_episode}`;
+                else if anime.status === 'Completed'
+                  - badgeTextContent += (badgeTextContent ? ' • ' : '') + `Complete`;
+                if anime.rating && !anime.current_episode && anime.status !== 'Completed'
+                  - badgeTextContent += (badgeTextContent ? ' • ' : '') + `⭐ ${anime.rating}`;
+
+                if badgeTextContent
+                  span(class="absolute bottom-1 right-1 bg-black/80 text-white text-xs font-semibold px-1.5 py-0.5 rounded flex items-center")
+                    | #{badgeTextContent}
+
+              // Video Details
+              div(class="flex items-start")
+                div(class="flex-1")
+                  h3(class="text-sm font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 leading-tight group-hover:text-yt-red")= anime.title
+                  div(class="text-xs text-gray-600 dark:text-gray-400 mt-1")
+                    p(class="line-clamp-1")
+                      | #{anime.release_day || 'KitaNime'}
+                      if anime.current_episode
+                        | • Episode #{anime.current_episode}
+                      else if anime.newest_release_date
+                        | • #{anime.newest_release_date}
+                      else if anime.status === 'Completed'
+                        | • Complete
+    else
+      div(class="text-center py-16")
+        p(class="text-gray-600 dark:text-gray-400") Anda belum menyukai anime apapun.

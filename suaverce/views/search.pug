@@ -1,0 +1,46 @@
+extends layout
+
+block content
+  div(class="container mx-auto px-4 py-6")
+    div(class="max-w-4xl mx-auto")
+      if keyword && searchResults
+        h1(class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2") Hasil untuk "#{keyword}"
+        p(class="text-sm text-gray-600 dark:text-gray-400 mb-6") Ditemukan #{searchResults.length} hasil.
+
+        //- Placeholder for Filter buttons
+        div(class="border-b border-gray-200 dark:border-gray-700 pb-4 mb-6")
+          div(class="flex items-center space-x-3")
+            button(class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-full text-sm font-semibold") Filters
+            //- You could add more specific filter buttons here
+
+        if searchResults.length > 0
+          // Vertical List of Horizontal Cards
+          div(class="space-y-6")
+            each anime in searchResults
+              a(href=`/anime/${anime.slug}` class="group block")
+                div(class="flex flex-col sm:flex-row gap-4")
+                  // Thumbnail
+                  div(class="w-full sm:w-1/3 md:w-56 flex-shrink-0")
+                    img(src=anime.poster alt=anime.title class="w-full h-auto object-cover rounded-lg aspect-video bg-gray-200 dark:bg-gray-700" onerror="this.onerror=null;this.src='https://placehold.co/320x180?text=No+Image';")
+
+                  // Details
+                  div
+                    h3(class="text-lg font-semibold text-gray-800 dark:text-gray-200 group-hover:text-primary-600 line-clamp-2")= anime.title
+                    div(class="text-xs text-gray-500 dark:text-gray-400 mt-1.5 flex items-center space-x-2")
+                      if anime.rating
+                        span Rating: #{anime.rating}
+                      if anime.status
+                        span ▪ #{anime.status}
+                    p(class="text-sm text-gray-600 dark:text-gray-400 mt-2 line-clamp-2")= anime.synopsis || "Tidak ada sinopsis tersedia untuk anime ini."
+
+        else
+          div(class="text-center py-16")
+            i(data-lucide="search" class="w-16 h-16 text-gray-400 mb-4")
+            h2(class="text-2xl font-bold mb-2") Tidak ada hasil untuk "#{keyword}"
+            p(class="text-gray-600 dark:text-gray-400") Coba gunakan kata kunci yang berbeda.
+
+      else
+        div(class="text-center py-16")
+          i(data-lucide="search" class="w-16 h-16 text-gray-400 mb-4")
+          h2(class="text-2xl font-bold mb-2") Cari Anime
+          p(class="text-gray-600 dark:text-gray-400") Gunakan bilah pencarian di atas untuk menemukan anime.
